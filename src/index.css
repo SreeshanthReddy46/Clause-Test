@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-brand-ink: #050505;
+  --color-brand-paper: #f2f2f2;
+  --color-brand-accent: #3b82f6; /* blue-500 */
+  --color-brand-accent-glow: rgba(59, 130, 246, 0.5);
+}
+
+@layer base {
+  body {
+    @apply bg-brand-ink text-brand-paper font-sans antialiased overflow-x-hidden;
+  }
+
+  h1, h2, h3 {
+    @apply leading-tight tracking-tighter;
+  }
+}
+
+.gsap-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.text-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.char-inner {
+  display: inline-block;
+  transform: translateY(100%);
+}
+
+/* Sophisticated background blur elements */
+.bg-glow-indigo {
+  background: radial-gradient(circle at center, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+}
+
+.bg-glow-blue {
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.animate-glitch {
+  animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-accent);
+}
+
+/* Prism Basic Dark Theme Overrides */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6366f1;
+}
+.token.punctuation {
+  color: #94a3b8;
+}
+.token.namespace {
+  opacity: .7;
+}
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f43f5e;
+}
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #10b981;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #8b5cf6;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #3b82f6;
+}
+.token.function,
+.token.class-name {
+  color: #f59e0b;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #e6db74;
+}

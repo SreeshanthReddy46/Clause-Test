@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Phase 3: Primitives
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Phase 2: Validation Blueprints
+    function isValidAudit(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.timestamp == request.time &&
+             data.results is list &&
+             data.results.size() > 0 &&
+             data.results.size() <= 20 && // Limit agent results
+             data.keys().hasAll(['userId', 'timestamp', 'results', 'srs', 'req', 'url', 'concurrency']) &&
+             data.keys().size() == 7;
+    }
+
+    // Audits Collection
+    match /audits/{auditId} {
+      allow get: if isOwner(resource.data.userId) && isValidId(auditId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn() && 
+                      isValidId(auditId) && 
+                      isValidAudit(request.resource.data);
+      
+      allow update, delete: if false; // Audit logs are immutable records
+    }
+  }
+}
